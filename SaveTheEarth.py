@@ -54,6 +54,15 @@ asteroids = []
 # 운석 폭발 시간 관리
 explosions = []
 
+# 초기 목숨 설정
+lives = 5
+
+# 목숨 이미지 로드
+heart_image = pygame.image.load('heart.png')
+heart_size = heart_image.get_rect().size
+heart_width = heart_size[0]
+heart_height = heart_size[1]
+
 # 운석 생성 함수
 def create_asteroid():
     asteroid_img = pygame.image.load(random.choice(asteroid_images))
@@ -117,8 +126,11 @@ while running:
             (fighter_x_pos + fighter_width / 3) < asteroid[1] + asteroid[0].get_rect().width - asteroid[0].get_rect().width / 3 < (fighter_x_pos + fighter_width - fighter_width / 3)) and \
            ((fighter_y_pos + fighter_height / 3) < asteroid[2] + asteroid[0].get_rect().height / 3 < (fighter_y_pos + fighter_height - fighter_height / 3) or
             (fighter_y_pos + fighter_height / 3) < asteroid[2] + asteroid[0].get_rect().height - asteroid[0].get_rect().height / 3< (fighter_y_pos + fighter_height - fighter_height / 3)):
-            game_over()
-            running = False
+            lives -= 1
+            asteroids.remove(asteroid)
+            if lives == 0:
+                game_over()
+                running = False
 
     # 화면 그리기
     screen.blit(background, (0, 0))
@@ -136,6 +148,9 @@ while running:
     for explosion in explosions:
         screen.blit(explosion[0], (explosion[1], explosion[2]))
 
+    for i in range(lives):
+        screen.blit(heart_image, (10 + i*(heart_width + 10), 10))
+        
     pygame.display.update()
     clock.tick(60)
 
