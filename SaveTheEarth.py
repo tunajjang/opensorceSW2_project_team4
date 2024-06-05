@@ -67,48 +67,18 @@ def game_over():
     font = pygame.font.Font(None, 74)
     text = font.render("Game Over", True, (255, 0, 0))
     screen.blit(text, (screen_width/2 - text.get_width()/2, screen_height/2 - text.get_height()/2))
-    game_over_screen()
-    if game_over_screen():
-        return True  # 게임을 재시작합니다.
+    game_over_button()
+    if game_over_button():
+        return True  # 게임재시작
     else:
         pygame.quit()
-        return False  # 게임을 종료합니다.
+        return False  # 게임종료
     pygame.display.update()
     pygame.time.delay(2000)
     pygame.quit()
-
-
-
-
-def draw_button(button_text, center_x, center_y, action=None):
-    font = pygame.font.Font(None, 36)
-    text = font.render(button_text, True, (255, 255, 255))
-    text_rect = text.get_rect(center=(center_x, center_y))
-    button_rect = text_rect.inflate(20, 10)
-    pygame.draw.rect(screen, (0, 128, 255), button_rect)
-    screen.blit(text, text_rect)
-    return button_rect
-
-def start_screen():
-    start_button = draw_button("Game Start", screen_width / 2, screen_height / 2 - 50)
-    quit_button = draw_button("Quit", screen_width / 2, screen_height / 2 + 50)
-    pygame.display.update()
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if start_button.collidepoint(event.pos):
-                    return True
-                elif quit_button.collidepoint(event.pos):
-                    return False
-            if event.type == pygame.QUIT:
-                return False
-
-# 게임 루프 전에 시작 화면 호출
-running = start_screen()
-if not running:
-    pygame.quit()
-
-def game_over_screen():
+    
+#게임오버 시 버튼 생성
+def game_over_button():
     restart_button = draw_button('Restart', screen_width / 2, screen_height / 2 - 50)
     quit_button = draw_button('Quit', screen_width / 2, screen_height / 2 + 50)
     pygame.display.update()
@@ -122,6 +92,35 @@ def game_over_screen():
             if event.type == pygame.QUIT:
                 return False
 
+#버튼생성
+def draw_button(button_text, center_x, center_y, action=None):
+    font = pygame.font.Font(None, 36)
+    text = font.render(button_text, True, (255, 255, 255))
+    text_rect = text.get_rect(center=(center_x, center_y))
+    button_rect = text_rect.inflate(20, 10)
+    pygame.draw.rect(screen, (0, 128, 255), button_rect)
+    screen.blit(text, text_rect)
+    return button_rect
+
+# 게임 시작 화면 
+def start_screen():
+    start_button = draw_button("Game Start", screen_width / 2, screen_height / 2 - 50)
+    quit_button = draw_button("Quit", screen_width / 2, screen_height / 2 + 50)
+    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if start_button.collidepoint(event.pos): #게임시작버튼
+                    return True
+                elif quit_button.collidepoint(event.pos): #게임종료버튼
+                    return False
+            if event.type == pygame.QUIT:
+                return False
+
+# 게임 루프 전에 시작 화면 호출
+running = start_screen()
+if not running:
+    pygame.quit()
 
 
 # 게임 루프
